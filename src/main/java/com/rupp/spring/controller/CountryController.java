@@ -70,14 +70,14 @@ public class CountryController {
   //@RequestMapping(value = "/v1", method = RequestMethod.POST)
     @PostMapping(value = "/v1")
     public ResponseEntity<Country> createCountry(@ModelAttribute Country country) {
-        logger.debug("====create new customer object ====");
+        logger.debug("====create new country object ====");
         service.create(country);
         return new ResponseEntity<>(country, HttpStatus.OK);
     }
     
     @PutMapping("/v1/{id}")
     public ResponseEntity updateCountry(@PathVariable Long id, @ModelAttribute Country country) {
-        logger.debug("====update customer detail with id :[{}] ====", id);
+        logger.debug("====update country detail with id :[{}] ====", id);
         country = service.update(id, country);
 
         if (null == country) {
@@ -89,7 +89,7 @@ public class CountryController {
     //@RequestMapping(value = "/v1/{id}", method = RequestMethod.DELETE)
     @DeleteMapping("/v1/{id}")
     public ResponseEntity deleteCountry(@PathVariable Long id) {
-        logger.debug("====delete customer with id :[{}] ====", id);
+        logger.debug("====delete country with id :[{}] ====", id);
         Country country = service.get(id);
         if (country == null) {
             return new ResponseEntity("No Country found for ID " + id, HttpStatus.NOT_FOUND);

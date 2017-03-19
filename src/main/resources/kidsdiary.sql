@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Mar 05, 2017 at 11:02 PM
+-- Generation Time: Mar 19, 2017 at 02:23 PM
 -- Server version: 5.5.38
 -- PHP Version: 5.6.2
 
@@ -98,13 +98,14 @@ CREATE TABLE `daily_activity_details` (
 --
 
 CREATE TABLE `families` (
+`id` bigint(20) NOT NULL,
   `father` bigint(20) NOT NULL,
   `mother` bigint(20) NOT NULL,
   `child` bigint(20) NOT NULL,
   `note` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -191,6 +192,12 @@ ALTER TABLE `daily_activity_details`
  ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `families`
+--
+ALTER TABLE `families`
+ ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -216,6 +223,11 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 ALTER TABLE `daily_activity_details`
 MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `families`
+--
+ALTER TABLE `families`
+MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `users`
 --
