@@ -3,6 +3,12 @@ $(document).ready(function() {
 	    cache: false,
 	    data: null
 	});
+	
+	/**
+	 * Clear all cookies
+	 */
+	window.cookie.setCookie(window.params.cookieKey, '{}', 0);
+	window.cookie.setCookie('verify', '', 0);
 
 	/**
 	 * @returns {String}
@@ -76,7 +82,7 @@ $(document).ready(function() {
      */
 	$('#btnCreateAccount').click(function() {
 		var data = {
-            username   : $("#email").val(),
+            username   : $("#username").val(),
             password   : $("#password").val(),
             firstName  : $("#firstName").val(),
             lastName   : $("#lastName").val(),

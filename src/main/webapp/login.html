@@ -49,23 +49,14 @@
 				
                 <a class="navbar-brand" href="index.html"><img src="admin-theme/img/icon.png" style="display: inline-block;"/>Kids Diary</a>
             </div>
-			<div class="nav navbar-top-links navbar-right">
+			<div class="nav navbar-top-links navbar-right" style="margin-top: 8px; margin-right: 10px;">
               <form role="form">
-                    <fieldset style="    margin-right: 10px;    padding-top: 12px;">
-                         <input  placeholder="User Name" name="username" type="username" autofocus="">
-                         <input  placeholder="Password" name="password" type="password" value="">
-						 <input  placeholder="Login" name="login" type="button" value="Login" class="btn btn-sm btn-success ">
-
-                            </fieldset>
+                    <input  placeholder="Username" id="loginUsername" type="text" autofocus>
+                    <input  placeholder="Password" id="loginPassword" type="password" value="">
+					
+					<button type="button" id="btnLogin" class="btn btn-success">Login</button>
               </form>
             </div>
-            <!-- /.navbar-header -->
-
-						
-            <!-- /.navbar-top-links -->
-
-
-            <!-- /.navbar-static-side -->
         </nav>
 
 
@@ -113,15 +104,20 @@
                           
                           <div class="form-group">
                               <label>Email </label>
-                              <input id="email" class="form-control" placeholder="Email" value="nguonchhay.touch@gmail.com">
+                              <input type="email" id="email" class="form-control" placeholder="Email" value="nguonchhay.touch@gmail.com">
                           </div>
                           
-							<div class="form-group">
+                          <div class="form-group">
+                              <label>Username </label>
+                              <input type="text" id="username" class="form-control" placeholder="Username" value="nguonchhay">
+                          </div>
+                          
+						  <div class="form-group">
                               <label>New Password <span id="passwordUtil"><i class="fa fa-eye-slash"></i></span></label>
-                              <input id="password" class="form-control" placeholder="Password" id="password" name="password" type="password" value="">
+                              <input type="password" id="password" class="form-control" placeholder="Password" id="password" name="password" value="">
                           </div>
                           
-                          <button type="button" id="btnCreateAccount" class="btn btn-lg btn-success">Create Account</button>
+                          <button type="button" id="btnCreateAccount" class="btn btn-success">Create Account</button>
                       </form>
                 </div>
                 <!-- /.col-lg-6 -->
