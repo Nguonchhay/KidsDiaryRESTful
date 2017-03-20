@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Login - Kids Diary App</title>
+	<link rel="shortcut icon" href="admin-theme/img/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="admin-theme/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="admin-theme/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="admin-theme/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="admin-theme/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+
+        <!-- /#page-wrapper -->
+		<div id="page-wrapper" style="    position: inherit;
+    margin: 0 0 0 0px;
+    padding: 0 30px;
+    border-left: 0px solid #e7e7e7;">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-4">
+                	<div class="image">
+                		<img src="admin-theme/img/wellcome.png" style="display: inline-block;width:400px" />
+                	</div>
+                    <div style="max-width: 400px; overflow: hidden">
+                   		<form role="form">
+                          <div class="form-group">
+                              <label>Complete your sign up by enter this verify number: <em><span id="verifyCodeShow"></span></em></label>
+                              <input class="form-control" id="verifyCode" placeholder="Enter verify code above" value="">
+                          </div>
+                          
+                          <button type="button" id="btnVerify" class="btn btn-success">Verify</button>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /#wrapper -->
+    
+     <!-- jQuery -->
+    <script src="admin-theme/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="admin-theme/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="admin-theme/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="admin-theme/dist/js/sb-admin-2.js"></script>
+	
+	<script src="js/cookie.js"></script>
+	<script>
+		$(document).ready(function() {
+			var cookieVerifyCode = window.cookie.getCookie('verify');
+			if (cookieVerifyCode == '') {
+				document.location.href = 'login.html';
+			}
+			
+			$('#verifyCodeShow').html(cookieVerifyCode);
+			
+			$('#btnVerify').click(function() {
+				var verify = $('#verifyCode');
+				if (verify.val() === '') {
+					alert('Please, input the provided verify code');
+				} else {
+					if (verify.val() !== cookieVerifyCode) {
+						alert('You entered a wrong verify code');
+					} else {
+						window.cookie.setCookie('verify', '', 0);
+						document.location.href = 'index.html';
+					}
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>

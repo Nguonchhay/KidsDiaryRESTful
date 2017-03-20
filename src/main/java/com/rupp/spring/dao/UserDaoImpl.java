@@ -196,8 +196,9 @@ public class UserDaoImpl implements UserDao {
      * @return User object with updated id
      */
     public User create(User user) {
-        final String sql = "INSERT INTO " + User.TABLE + " (username,password,email,phone,firstName,lastName,sex,birthDate,country,userType) VALUES (?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(), user.getFirstName(), user.getLastName(), user.getSex(), user.getBirthDate(), user.getCountry(), user.getUserType() });
+    	user.setAccessToken(String.valueOf((int)(Math.random()*9000) + 1000));
+        final String sql = "INSERT INTO " + User.TABLE + " (username,password,email,phone,firstName,lastName,sex,birthDate,country,userType,accessToken) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(), user.getFirstName(), user.getLastName(), user.getSex(), user.getBirthDate(), user.getCountry(), user.getUserType(), user.getAccessToken() });
         return user;
     }
 
