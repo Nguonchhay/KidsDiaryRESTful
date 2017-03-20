@@ -48,6 +48,11 @@ public class FamilyServiceImpl implements FamilyService {
         return dao.update(family);
     }
     
+    @Override
+    public void updateFamily(Long father, Long mother, boolean isFather) {
+        dao.updateFamily(father, mother, isFather);
+    }
+    
     public ResponseList<Family> getPage(int pagesize, String cursorkey) {
         logger.debug(" getPage limit : {} cursorkey : {}", pagesize, cursorkey);
         return dao.getPage(pagesize, cursorkey);

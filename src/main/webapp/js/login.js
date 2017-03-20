@@ -90,7 +90,7 @@ $(document).ready(function() {
             userType   : parseInt($("#userType").val()),
             sex        : $("#sex").val(),
             email      : $("#email").val(),
-            birthDate  : '1991-05-06',
+            birthDate  : '1970-01-01',
             phone      : '',
             accessToken: '0'
         };

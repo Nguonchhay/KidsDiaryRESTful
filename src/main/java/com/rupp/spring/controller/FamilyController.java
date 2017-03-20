@@ -1,6 +1,7 @@
 package com.rupp.spring.controller;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rupp.spring.domain.Family;
 import com.rupp.spring.domain.ResponseList;
+import com.rupp.spring.domain.User;
 import com.rupp.spring.service.FamilyService;
+import com.rupp.spring.service.UserService;
 
 @Controller
 @RequestMapping("families")
@@ -38,6 +41,9 @@ public class FamilyController {
 
     @Autowired
     private FamilyService service;
+    
+    @Autowired
+    private UserService userService;
     
 
     //@RequestMapping(value = "/v1", method = RequestMethod.GET)
@@ -67,11 +73,65 @@ public class FamilyController {
         return new ResponseEntity<>(family, HttpStatus.OK);
     }
     
-    //@RequestMapping(value = "/v1", method = RequestMethod.POST)
-    @PostMapping(value = "/v1")
-    public ResponseEntity<Family> createFamily(@ModelAttribute Family family) {
+    @RequestMapping(value = "/v1", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity createFamily(HttpServletRequest request, 
+    		@RequestParam(value="parentId", required=true) Long parentId,
+    		@RequestParam(value="parentType", required=true) int parentType,
+    		@RequestParam(value="note", required=true) String note,
+            @RequestParam(value="firstName", required=true) String firstName, 
+            @RequestParam(value="lastName", required=true) String lastName,
+            @RequestParam(value="sex", required=true) String sex, 
+            @RequestParam(value="username", required=true) String username,
+            @RequestParam(value="password", required=true) String password, 
+            @RequestParam(value="country", required=true) int country,
+            @RequestParam(value="userType", required=true) int userType, 
+            @RequestParam(value="birthDate", required=true) String birthDate,
+            @RequestParam(value="email", required=true) String email, 
+            @RequestParam(value="phone", required=true) String phone
+    ) {
         logger.debug("====create new family object ====");
-        service.create(family);
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setSex(sex);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setCountry(country);
+        user.setUserType(userType);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setAccessToken("");
+        user.setActivated(true);
+        
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	        Date inputDate;
+			inputDate = dateFormat.parse(birthDate);
+			user.setBirthDate(inputDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        user = userService.create(user);
+        
+        Family family = new Family();
+        family.setChild(user.getId());
+        family.setNote(note);
+        boolean isFather = false;
+        if (parentType == 1 || parentType == 4) {
+        	family.setFather(parentId);
+        	family.setMother(0L);
+        	isFather = true;
+        } else if (parentType == 2) {
+        	family.setMother(parentId);
+        	family.setFather(0L);
+        }
+        family = service.create(family);
+        
+        if (user.getUserType() != 3) {
+        	service.updateFamily(family.getFather(), family.getMother(), isFather);
+        }
+        
         return new ResponseEntity<>(family, HttpStatus.OK);
     }
     

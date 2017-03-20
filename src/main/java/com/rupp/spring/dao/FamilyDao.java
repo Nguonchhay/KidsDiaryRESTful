@@ -37,6 +37,13 @@ public interface FamilyDao {
     Family update(Family family);
     
     /**
+     * @param father
+     * @param mother
+     * @param isFather
+     */
+    void updateFamily(Long father, Long mother, boolean isFather);
+    
+    /**
      * @param pagesize
      * @param cursorkey
      * @return

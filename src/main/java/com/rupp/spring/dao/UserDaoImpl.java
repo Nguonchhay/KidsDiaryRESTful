@@ -241,8 +241,36 @@ public class UserDaoImpl implements UserDao {
      */
     public User create(User user) {
     	user.setAccessToken(String.valueOf((int)(Math.random()*9000) + 1000));
-        final String sql = "INSERT INTO " + User.TABLE + " (username,password,email,phone,firstName,lastName,sex,birthDate,country,userType,accessToken) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(), user.getFirstName(), user.getLastName(), user.getSex(), user.getBirthDate(), user.getCountry(), user.getUserType(), user.getAccessToken() });
+        final String sql = "INSERT INTO " + User.TABLE + " (username,password,email,phone,firstName,lastName,sex,birthDate,country,userType,accessToken,isActivated) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(), user.getFirstName(), user.getLastName(), user.getSex(), user.getBirthDate(), user.getCountry(), user.getUserType(), user.getAccessToken(), user.isActivated() });
+        
+        User obj = jdbcTemplate.queryForObject("SELECT * from " + User.TABLE + " ORDER BY id DESC LIMIT 1", new RowMapper<User>() {
+
+            @Override
+            public User mapRow(ResultSet rs, int paramInt) throws SQLException {
+                final User domain = new User();
+                domain.setId(rs.getLong("id"));
+                domain.setUsername(rs.getString("username"));
+                domain.setEncryptPassword(rs.getString("password"));               
+                domain.setAccessToken(rs.getString("accessToken"));
+                if (rs.getTimestamp("loggedinDate") != null) {
+                	domain.setLoggedinDate(new Date(rs.getTimestamp("loggedinDate").getTime()));
+                }
+                domain.setEmail(rs.getString("email"));
+                domain.setPhone(rs.getString("phone"));
+                domain.setFirstName(rs.getString("firstName"));
+                domain.setLastName(rs.getString("lastName"));
+                domain.setSex(rs.getString("sex"));
+                domain.setBirthDate(new Date(rs.getTimestamp("birthDate").getTime()));
+                domain.setCountry(Integer.parseInt(rs.getString("country")));
+                domain.setUserType(Integer.parseInt(rs.getString("userType")));
+                domain.setActivated(Boolean.parseBoolean(rs.getString("isActivated")));                
+                domain.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
+                return domain;
+            }
+        });        
+        user = obj;
+
         return user;
     }
 

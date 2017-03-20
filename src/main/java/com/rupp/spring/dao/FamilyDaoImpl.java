@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rupp.spring.domain.Family;
 import com.rupp.spring.domain.ResponseList;
+import com.rupp.spring.domain.User;
 
 @Repository("familyDaoImpl")
 public class FamilyDaoImpl implements FamilyDao {
@@ -168,6 +169,21 @@ public class FamilyDaoImpl implements FamilyDao {
     public Family create(Family family) {
         final String sql = "INSERT INTO " + Family.TABLE + " (father,mother,child,note) VALUES (?,?,?,?)";
         jdbcTemplate.update(sql, new Object[] { family.getFather(), family.getMother(), family.getChild(), family.getNote() });
+        
+        Family obj = jdbcTemplate.queryForObject("SELECT * from " + Family.TABLE + " ORDER BY id DESC LIMIT 1", new RowMapper<Family>() {
+            @Override
+            public Family mapRow(ResultSet rs, int paramInt) throws SQLException {
+                final Family domain = new Family();
+                domain.setId(rs.getLong("id"));
+                domain.setFather(Long.parseLong(rs.getString("father")));
+                domain.setMother(Long.parseLong(rs.getString("mother")));
+                domain.setChild(Long.parseLong(rs.getString("child")));
+                domain.setNote(rs.getString("note"));
+                domain.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
+                return domain;
+            }
+        });
+        family = obj;
         return family;
     }
 
@@ -193,6 +209,21 @@ public class FamilyDaoImpl implements FamilyDao {
         int result = jdbcTemplate.update(sql, new Object[] { family.getFather(), family.getMother(), family.getChild(), family.getNote() , family.getId()});
         return result == 1 ? family : null;
 
+    }
+    
+    /**
+     * @param father
+     * @param mother
+     * @param isFather
+     */
+    public void updateFamily(Long father, Long mother, boolean isFather) {
+        if (isFather) {
+        	final String sql = "UPDATE " + Family.TABLE + " set mother =? where father=?";
+        	int result = jdbcTemplate.update(sql, new Object[] { mother, father});
+        } else {
+        	final String sql = "UPDATE " + Family.TABLE + " set father =? where mother=?";
+        	int result = jdbcTemplate.update(sql, new Object[] { father, mother});
+        }
     }
 
 }
