@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.rupp.spring.domain.User;
+import com.rupp.spring.utility.PasswordUtility;
 import com.rupp.spring.domain.ResponseList;
 
 @Repository("userDaoImpl")
@@ -147,6 +148,49 @@ public class UserDaoImpl implements UserDao {
         });
         return list;
     }
+    
+    /**
+     * @param username
+     * @param password
+     * @return UserType object for given id
+     */
+    public User login(String username, String password) {
+        final String sql = "select * from " + User.TABLE + " where username = ? and password = ?";
+        String convertPassword = PasswordUtility.encrypt(password);
+        try {
+            //select for object
+            final User obj = jdbcTemplate.queryForObject(sql, new Object[] { username, convertPassword }, new RowMapper<User>() {
+
+                @Override
+                public User mapRow(ResultSet rs, int paramInt) throws SQLException {
+                    final User domain = new User();
+                    domain.setId(rs.getLong("id"));
+                    domain.setUsername(rs.getString("username"));
+                    domain.setEncryptPassword(rs.getString("password"));               
+                    domain.setAccessToken(rs.getString("accessToken"));
+                    if (rs.getTimestamp("loggedinDate") != null) {
+                    	domain.setLoggedinDate(new Date(rs.getTimestamp("loggedinDate").getTime()));
+                    }
+                    domain.setEmail(rs.getString("email"));
+                    domain.setPhone(rs.getString("phone"));
+                    domain.setFirstName(rs.getString("firstName"));
+                    domain.setLastName(rs.getString("lastName"));
+                    domain.setSex(rs.getString("sex"));
+                    domain.setBirthDate(new Date(rs.getTimestamp("birthDate").getTime()));
+                    domain.setCountry(Integer.parseInt(rs.getString("country")));
+                    domain.setUserType(Integer.parseInt(rs.getString("userType")));
+                    domain.setActivated(Boolean.parseBoolean(rs.getString("isActivated")));                
+                    domain.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
+                    return domain;
+                }
+            });
+            return obj;
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Username or password is incorrect!" );
+            return null;
+        }
+    }
+
 
     /**
      * @param id UserType id

@@ -2,8 +2,11 @@ package com.rupp.spring.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,11 +60,25 @@ public class UserController {
     @GetMapping("/v1/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         logger.debug("====get country detail with id :[{}] ====", id);
-        final User country = service.get(id);
-        if (country == null) {
+        final User user = service.get(id);
+        if (user == null) {
             return new ResponseEntity("No User found for ID " + id, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(country, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/v1/login", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity login(HttpServletRequest request, 
+            @RequestParam(value="username", required=true) String username, 
+            @RequestParam(value="password", required=true) String password) {
+    	logger.debug("====Login ====");
+    	final User user = service.login(username, password);
+        if (user == null) {
+            return new ResponseEntity("Username or password is incorrect!", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+        }
+        
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
     
     //@RequestMapping(value = "/v1", method = RequestMethod.POST)

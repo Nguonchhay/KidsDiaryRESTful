@@ -132,4 +132,35 @@ $(document).ready(function() {
 			item.removeClass('fa-eye-slash');
 		}
 	});
+	
+	/**
+     * Register user account
+     */
+	$('#btnLogin').click(function() {
+		var data = {
+            username   : $("#loginUsername").val(),
+            password   : $("#loginPassword").val()
+        };
+		
+	    $.ajax({
+	        type        : "POST",
+	        url         : apiBaseUrl + "/users/v1/login",
+	        data        : data,
+	        dataType    : "text",
+	        error       : function(jqXHR, textStatus, errorThrown) {
+	            console.log('getJSON request failed! ' + textStatus);
+	            var json = JSON.parse(jqXHR.responseText);
+	            alert(json.message);
+	        },
+	        success     : function(data, textStatus, jqXHR) {
+	        	var user = JSON.parse(data);
+	        	if (user.accessToken !== undefined) {
+	        		window.cookie.setCookie(window.params.cookieKey, data, window.params.expireDay * 24);
+	        		document.location.href = 'index.html';
+	        	} else {
+	        		alert('Username or passsword is incorrect!');
+	        	}
+	        }
+	    });
+	});
 });

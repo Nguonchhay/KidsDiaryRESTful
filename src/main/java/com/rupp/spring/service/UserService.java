@@ -7,6 +7,7 @@ import com.rupp.spring.domain.ResponseList;
 
 public interface UserService {
     List<User> list();
+    User login(String username, String password);
     User get(Long id);
     User create(User user);
     Long delete(Long id);

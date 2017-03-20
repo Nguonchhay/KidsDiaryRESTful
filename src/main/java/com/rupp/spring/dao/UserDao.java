@@ -13,6 +13,13 @@ public interface UserDao {
     List<User> list();
 
     /**
+     * @param username
+     * @param password
+     * @return User
+     */
+    User login(String username, String password);
+    
+    /**
      * @param id
      * @return User
      */

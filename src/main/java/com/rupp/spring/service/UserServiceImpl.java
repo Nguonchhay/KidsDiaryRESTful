@@ -22,6 +22,11 @@ public class UserServiceImpl implements UserService {
     public List<User> list() {
         return dao.list();
     }
+    
+    @Override
+    public User login(String username, String password) {
+        return dao.login(username, password);
+    }
 
     @Override
     public User get(Long id) {
