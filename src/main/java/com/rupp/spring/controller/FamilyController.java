@@ -93,10 +93,10 @@ public class FamilyController {
     public List<User> getFamilyChildren(HttpServletRequest request, 
     		@RequestParam(value="parentId", required=true) Long parentId,
     		@RequestParam(value="userType", required=true) Long userType) {
-        logger.debug("====get family children with id :[{}] ====", parentId);
+        logger.debug("====get children whose parent's id :[{}] ====", parentId);
         List<Family> families = service.getFamily(parentId, userType);
         List<User> children = new ArrayList();
-        
+
         if (! families.isEmpty()) {
         	String strChildren = "";
         	for (Object obj : families.toArray()) {
@@ -106,8 +106,8 @@ public class FamilyController {
 
         	if (! "".equals(strChildren)) {
         		strChildren = (String) strChildren.subSequence(0,  strChildren.length() - 1);
-        		final String sql = "select * from " + User.TABLE + " WHERE id IN(?)";
-        		children = this.jdbcTemplate.query(sql, new Object[]{ strChildren}, new RowMapper<User>() {
+        		final String sql = "select * from " + User.TABLE + " WHERE id IN (" + strChildren + ") ";
+        		children = this.jdbcTemplate.query(sql, new RowMapper<User>() {
                     @Override
                     public User mapRow(ResultSet rs, int paramInt) throws SQLException {
                     	final User domain = new User();

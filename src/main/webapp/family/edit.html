@@ -23,6 +23,9 @@
 
     <!-- Custom Fonts -->
     <link href="../admin-theme/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    <link rel="stylesheet" href="../css/custom.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -133,55 +136,54 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <img src="../admin-theme/img/family.png" style="display: inline-block;"/>
-                            List Children
+                            Edit child
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table" id="childrenTable">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Last name</th>
-                                            <th>First Name</th>
-                                            <th>Sex</th>
-                                            <th>Date of birth</th>
-                                            <th>
-												<a href="create.html" class="btn btn-default"><i class="fa fa-plus"></i> New </a>
-											</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    	<tr>
-                                    		<td colspan="6"> No child.</td>
-                                    	</tr>
-                                        <!-- <tr>
-                                            <td>1</td>
-                                            <td>Sok</td>
-                                            <td>Sok</td>
-                                            <td>FM</td>
-                                            <td></td>
-                                            <td>
-                                            	<button type="button" class="btn btn-default" id="childEdit" data-href="edit.html?id="><i class="fa fa-edit"></i> Edit </button>
-                                            	<button type="button" class="btn btn-default" id="childDelete" data-href="/api/users/v1/"><i class="fa fa-times"></i> Delete </button>
-											</td>
-                                        </tr> -->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
+                            <form role="form">
+	                          <div class="form-group">
+	                              <label>First Name</label>
+	                              <input class="form-control" id="firstName" placeholder="First Name" value="Sok">
+	                          </div>
+	                          
+								<div class="form-group">
+	                              <label>Last Name</label>
+	                              <input class="form-control" id="lastName" placeholder="Last Name" value="San">
+	                          </div>
+	                          
+	                          <div class="form-group">
+	                              <label>Sex</label>
+	                              <select id="sex" class="form-control">
+	                              	<option value=""></option>
+	                              	 <option selected value="M">M</option>
+	                              	 <option value="F">F</option>
+	                              </select>
+	                          </div>
+	                          
+	                          <div class="form-group">
+	                              <label>Phone</label>
+	                              <input type="text" id="phone" class="form-control" placeholder="Phone" value="012">
+	                          </div>
+	                          
+	                          <div class="form-group">
+							      <label>Date of birth</label>
+							     <input type="text" required class="form-control" id="birthDate" name="birthDate" placeholder="Enter date with format yyyy-mm-dd" />
+							  </div>
+                          
+	                          <button type="button" id="btnUpdateChild" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save </button>
+	                          <a href="index.html" class="btn btn-default"><i class="fa fa-long-arrow-left"></i> Back to list</a>
+	                      </form>
                         </div>
-                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel -->
                 </div>
-			<!-- /.row -->
-			
         </div>
     </div>
 
     <!-- jQuery -->
     <script src="../admin-theme/vendor/jquery/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui-1.8.17.custom.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../admin-theme/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -191,30 +193,25 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../admin-theme/dist/js/sb-admin-2.js"></script>
+    <script src="../js/jquery-ui.js"></script>
 	
 	<script src="../js/cookie.js"></script>
 	<script src="../js/custom.js"></script>
 	<script>
 		$(document).ready(function() {
-			var parentId = 0,
-				userType = 1;
-			var data = window.cookie.getCookie(window.params.cookieKey);
-			var user = JSON.parse(data);
-			if (user.accessToken !== undefined) {
-				parentId = parseInt(user.id)
-				userType = parseInt(user.userType)
-			}
+			var selectedUser = {};
+			
+			$('#birthDate').datepicker({
+		    	dateFormat: 'yy-mm-dd'
+		    });
 			
 			/**
-			 * Assign children to family
+			 * Find family member
 			 */
 			 $.ajax({
-		        type        : "POST",
-		        url         : window.params.baseUrl + "/api/families/v1/children",
-		        data        : {
-		        	parentId : parentId,
-		        	userType : userType
-		        },
+		        type        : "GET",
+		        url         : window.params.baseUrl + "/api/users/v1/" + window.getUrlParameter('id'),
+		        data        : {},
 		        dataType    : "text",
 		        error       : function(jqXHR, textStatus, errorThrown) {
 		            console.log('getJSON request failed! ' + textStatus);
@@ -222,79 +219,71 @@
 		            alert(json.message);
 		        },
 		        success     : function(data, textStatus, jqXHR) {
-		          	var children = JSON.parse(data);
-			      	var childrenData = '';
-			      	if (children.length) {
-			      		$.each(children, function(index, child) {
-			      			var childData = '<tr>';
-			      				childData += '<td>' + (index + 1) + '</td>';
-			      				childData += '<td>' + child.lastName + '</td>';
-			      				childData += '<td>' + child.firstName + '</td>';
-			      				childData += '<td>' + child.sex + '</td>';
-			      				childData += '<td>' + child.birthDate + '</td>';
-			      				childData += '<td>';
-			      					childData += '<a class="btn btn-default child-edit" href="edit.html?id=' + child.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
-			      					childData += '<button type="button" class="btn btn-default child-delete" onclick="deleteChild(' + child.id + ')" id="' + child.id + '" data-href="/api/families/v1/' + child.id + '"><i class="fa fa-times"></i> Delete </button>';
-			      				childData += '</td>';
-			      			childData += '</tr>';
-			      			childrenData += childData;
-			      		});
-			      	}
-
-			      	if (childrenData == '') {
-			      		$('#childrenTable tbody').html('No child.');
-			      	} else {
-			      		$('#childrenTable tbody').html(childrenData);	
-			      	}
+		          	var child = JSON.parse(data);
+			      	$('#firstName').val(user.firstName);
+			      	$('#lastName').val(user.lastName);
+			      	$('#sex').val(user.sex);
+			      	$('#email').val(user.email);
+			      	$('#phone').val(user.phone);
+			      	$('#birtDate').val(user.birtDate);
+			      	selectedUser = child;
 			   }
 		    });
 			
 			/**
-			 * Delete children
-			 */
-			 function deleteChild(id) {
-				var button = $('#' + id);
-				alert(id);
-				 if (confirm('Are you sure to delete this children?')) {
-					 $.ajax({
-					        type        : "DELETE",
-					        url         : window.params.baseUrl + button.data('href') ,
-					        data        : {},
-					        dataType    : "text",
-					        error       : function(jqXHR, textStatus, errorThrown) {
-					            console.log('getJSON request failed! ' + textStatus);
-					            var json = JSON.parse(jqXHR.responseText);
-					            alert(json.message);
-					        },
-					        success     : function(data, textStatus, jqXHR) {
-					          	var children = JSON.parse(data);
-						      	var childrenData = '';
-						      	if (children.length) {
-						      		$.each(children, function(index, child) {
-						      			var childData = '<tr>';
-						      				childData += '<td>' + (index + 1) + '</td>';
-						      				childData += '<td>' + child.lastName + '</td>';
-						      				childData += '<td>' + child.firstName + '</td>';
-						      				childData += '<td>' + child.sex + '</td>';
-						      				childData += '<td>' + child.birthDate + '</td>';
-						      				childData += '<td>';
-						      					childData += '<button type="button" class="btn btn-default" id="childEdit" data-href="edit.html?id="><i class="fa fa-edit"></i> Edit </button>  ';
-						      					childData += '<button type="button" class="btn btn-default" id="childDelete" data-href="/api/users/v1/"><i class="fa fa-times"></i> Delete </button>';
-						      				childData += '</td>';
-						      			childData += '</tr>';
-						      			childrenData += childData;
-						      		});
-						      	}
-
-						      	if (childrenData == '') {
-						      		$('#childrenTable tbody').html('No child.');
-						      	} else {
-						      		$('#childrenTable tbody').html(childrenData);	
-						      	}
-						   }
-					    });
-				 }
-			}
+		     * Create new child
+		     */
+			$('#btnUpdateChild').click(function() {
+				var country = 0,
+				userType = 3,
+				birthDate = $("#birthDate").val(),
+				parentId = 0,
+				parentType = 1;
+				
+				var data = window.cookie.getCookie(window.params.cookieKey);
+				var user = JSON.parse(data);
+				if (user.accessToken !== undefined) {
+					country = parseInt(user.country);
+					parentId = parseInt(user.id);
+					parentType = parseInt(user.userType);
+				}
+				
+				var data = {
+					parentId   : parentId,
+					parentType : parentType,
+					note       : $("#note").val(),
+		            username   : $("#username").val(),
+		            password   : $("#password").val(),
+		            firstName  : $("#firstName").val(),
+		            lastName   : $("#lastName").val(),
+		            country    : country,
+		            userType   : userType,
+		            sex        : $("#sex").val(),
+		            email      : '',
+		            birthDate  : birthDate != '' ? birthDate : '1970-01-01',
+		            phone      : $("#phone").val()
+		        };
+				
+			    $.ajax({
+			        type        : "POST",
+			        url         : window.params.baseUrl + "/api/families/v1",
+			        data        : data,
+			        dataType    : "text",
+			        error       : function(jqXHR, textStatus, errorThrown) {
+			            console.log('getJSON request failed! ' + textStatus);
+			            var json = JSON.parse(jqXHR.responseText);
+			            alert(json.message);
+			        },
+			        success     : function(data, textStatus, jqXHR) {
+			        	var family = JSON.parse(data);
+			        	if (family.child !== undefined) {
+			        		document.location.href = 'index.html';
+			        	} else {
+			        		alert('Something went wrong while trying to add clild data. Please try again!');
+			        	}
+			        }
+			    });
+			});
 		});
 	</script>
 </body>
