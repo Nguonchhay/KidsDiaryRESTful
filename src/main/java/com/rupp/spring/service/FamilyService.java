@@ -7,6 +7,7 @@ import com.rupp.spring.domain.ResponseList;
 
 public interface FamilyService {
     List<Family> list();
+    List<Family> getFamily(Long parentId, Long userType);
     Family get(Long id);
     Family create(Family camily);
     Long delete(Long id);

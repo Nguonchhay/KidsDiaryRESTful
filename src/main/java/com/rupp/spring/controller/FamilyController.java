@@ -1,20 +1,26 @@
 package com.rupp.spring.controller;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +51,14 @@ public class FamilyController {
     @Autowired
     private UserService userService;
     
+    private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    public FamilyController(DataSource dataSource) {
+        //jdbcTemplate = new JdbcTemplate(DBCP2DataSourceUtils.getDataSource());
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+    
 
     //@RequestMapping(value = "/v1", method = RequestMethod.GET)
     @GetMapping("/v1/all")
@@ -71,6 +85,56 @@ public class FamilyController {
             return new ResponseEntity("No Family found for ID " + id, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(family, HttpStatus.OK);
+    }
+    
+    //@RequestMapping(value = "/v1/children/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/children", method = RequestMethod.POST)
+    @ResponseBody
+    public List<User> getFamilyChildren(HttpServletRequest request, 
+    		@RequestParam(value="parentId", required=true) Long parentId,
+    		@RequestParam(value="userType", required=true) Long userType) {
+        logger.debug("====get family children with id :[{}] ====", parentId);
+        List<Family> families = service.getFamily(parentId, userType);
+        List<User> children = new ArrayList();
+        
+        if (! families.isEmpty()) {
+        	String strChildren = "";
+        	for (Object obj : families.toArray()) {
+        		Family family = (Family) obj;
+        		strChildren += family.getChild() + ",";
+        	}
+
+        	if (! "".equals(strChildren)) {
+        		strChildren = (String) strChildren.subSequence(0,  strChildren.length() - 1);
+        		final String sql = "select * from " + User.TABLE + " WHERE id IN(?)";
+        		children = this.jdbcTemplate.query(sql, new Object[]{ strChildren}, new RowMapper<User>() {
+                    @Override
+                    public User mapRow(ResultSet rs, int paramInt) throws SQLException {
+                    	final User domain = new User();
+                        domain.setId(rs.getLong("id"));
+                        domain.setUsername(rs.getString("username"));
+                        domain.setEncryptPassword(rs.getString("password"));               
+                        domain.setAccessToken(rs.getString("accessToken"));
+                        if (rs.getTimestamp("loggedinDate") != null) {
+                        	domain.setLoggedinDate(new Date(rs.getTimestamp("loggedinDate").getTime()));
+                        }
+                        domain.setEmail(rs.getString("email"));
+                        domain.setPhone(rs.getString("phone"));
+                        domain.setFirstName(rs.getString("firstName"));
+                        domain.setLastName(rs.getString("lastName"));
+                        domain.setSex(rs.getString("sex"));
+                        domain.setBirthDate(new Date(rs.getTimestamp("birthDate").getTime()));
+                        domain.setCountry(Integer.parseInt(rs.getString("country")));
+                        domain.setUserType(Integer.parseInt(rs.getString("userType")));
+                        domain.setActivated(Boolean.parseBoolean(rs.getString("isActivated")));                
+                        domain.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
+                        return domain;
+                    }
+                });
+        	}
+        }
+        
+        return children;
     }
     
     @RequestMapping(value = "/v1", method = RequestMethod.POST)

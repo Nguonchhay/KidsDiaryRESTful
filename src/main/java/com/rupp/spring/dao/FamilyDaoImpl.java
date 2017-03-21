@@ -49,9 +49,9 @@ public class FamilyDaoImpl implements FamilyDao {
             public Family mapRow(ResultSet rs, int paramInt) throws SQLException {
                 final Family domain = new Family();
                 domain.setId(rs.getLong("id"));
-                domain.setFather(Long.parseLong(rs.getString("father")));
-                domain.setMother(Long.parseLong(rs.getString("mother")));
-                domain.setChild(Long.parseLong(rs.getString("child")));
+                domain.setFather(rs.getLong("father"));
+                domain.setMother(rs.getLong("mother"));
+                domain.setChild(rs.getLong("child"));
                 domain.setNote(rs.getString("note"));
                 domain.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
                 return domain;
@@ -126,6 +126,33 @@ public class FamilyDaoImpl implements FamilyDao {
                 return domain;
             }
             
+        });
+        return list;
+    }
+    
+    /**
+     * @param parentId
+     * @param userType
+     * @return
+     */
+    public List<Family> getFamily(Long parentId, Long userType) {
+        String sql = "select * from " + Family.TABLE + " WHERE father = ?";
+        if (userType == 2) {
+        	sql = "select * from " + Family.TABLE + " WHERE mother = ?";
+        }
+        
+        List<Family> list = this.jdbcTemplate.query(sql, new Object[]{ parentId}, new RowMapper<Family>() {
+            @Override
+            public Family mapRow(ResultSet rs, int paramInt) throws SQLException {
+                final Family domain = new Family();
+                domain.setId(rs.getLong("id"));
+                domain.setFather(Long.parseLong(rs.getString("father")));
+                domain.setMother(Long.parseLong(rs.getString("mother")));
+                domain.setChild(Long.parseLong(rs.getString("child")));
+                domain.setNote(rs.getString("note"));
+                domain.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
+                return domain;
+            }
         });
         return list;
     }

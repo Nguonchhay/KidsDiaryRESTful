@@ -138,7 +138,7 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table" id="familyTable">
+                                <table class="table" id="childrenTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -194,6 +194,62 @@
 	
 	<script src="../js/cookie.js"></script>
 	<script src="../js/custom.js"></script>
+	<script>
+		$(document).ready(function() {
+			var parentId = 0,
+				userType = 1;
+			var data = window.cookie.getCookie(window.params.cookieKey);
+			var user = JSON.parse(data);
+			if (user.accessToken !== undefined) {
+				parentId = parseInt(user.id)
+				userType = parseInt(user.userType)
+			}
+			
+			/**
+			 * Assign children to family
+			 */
+			 $.ajax({
+		        type        : "POST",
+		        url         : window.params.baseUrl + "/api/families/v1/children",
+		        data        : {
+		        	parentId : parentId,
+		        	userType : userType
+		        },
+		        dataType    : "text",
+		        error       : function(jqXHR, textStatus, errorThrown) {
+		            console.log('getJSON request failed! ' + textStatus);
+		            var json = JSON.parse(jqXHR.responseText);
+		            alert(json.message);
+		        },
+		        success     : function(data, textStatus, jqXHR) {
+		          	var children = JSON.parse(data);
+			      	var childrenData = '';
+			      	if (children.length) {
+			      		$.each(children, function(index, child) {
+			      			var childData = '<tr>';
+			      				childData += '<td>' + (index + 1) + '</td>';
+			      				childData += '<td>' + child.lastName + '</td>';
+			      				childData += '<td>' + child.firstName + '</td>';
+			      				childData += '<td>' + child.sex + '</td>';
+			      				childData += '<td>' + child.birthDate + '</td>';
+			      				childData += '<td>';
+			      					childData += '<button type="button" class="btn btn-default" id="childEdit" data-href="edit.html?id="><i class="fa fa-edit"></i> Edit </button>  ';
+			      					childData += '<button type="button" class="btn btn-default" id="childDelete" data-href="/api/users/v1/"><i class="fa fa-times"></i> Delete </button>';
+			      				childData += '</td>';
+			      			childData += '</tr>';
+			      			childrenData += childData;
+			      		});
+			      	}
+
+			      	if (childrenData == '') {
+			      		$('#childrenTable tbody').html('No child.');
+			      	} else {
+			      		$('#childrenTable tbody').html(childrenData);	
+			      	}
+			   }
+		    });
+		});
+	</script>
 </body>
 
 </html>

@@ -22,6 +22,11 @@ public class FamilyServiceImpl implements FamilyService {
     public List<Family> list() {
         return dao.list();
     }
+    
+    @Override
+    public List<Family> getFamily(Long parentId, Long userType) {
+    	return dao.getFamily(parentId, userType);
+    }
 
     @Override
     public Family get(Long id) {

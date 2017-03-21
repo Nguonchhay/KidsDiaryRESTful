@@ -11,6 +11,11 @@ public interface FamilyDao {
      * @return
      */
     List<Family> list();
+    
+    /**
+     * @return
+     */
+    List<Family> getFamily(Long parentId, Long userType);
 
     /**
      * @param id
