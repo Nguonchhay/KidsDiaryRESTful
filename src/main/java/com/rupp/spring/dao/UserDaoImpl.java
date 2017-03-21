@@ -291,8 +291,9 @@ public class UserDaoImpl implements UserDao {
      * @return User object with id
      */
     public User update(User user) {
+    	String password = PasswordUtility.decrypt(user.getPassword());
         final String sql = "UPDATE " + User.TABLE + " set username =? , password =?, accessToken =? , loggedinDate =? , email =? , phone =? , firstName =?, lastName =?, sex =? , birthDate =? , country =? , userType = ? , isActivated =? , deletedAt =? where id=?";
-        int result = jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getPassword(), user.getAccessToken(), user.getLoggedinDate(), user.getEmail(), user.getPhone(), user.getFirstName(), user.getLastName(), user.getSex(), user.getBirthDate(), user.getCountry(), user.getUserType(), user.isActivated(), user.getDeletedAt() , user.getId()});
+        int result = jdbcTemplate.update(sql, new Object[] { user.getUsername(), password, user.getAccessToken(), user.getLoggedinDate(), user.getEmail(), user.getPhone(), user.getFirstName(), user.getLastName(), user.getSex(), user.getBirthDate(), user.getCountry(), user.getUserType(), user.isActivated(), user.getDeletedAt() , user.getId()});
         return result == 1 ? user : null;
 
     }

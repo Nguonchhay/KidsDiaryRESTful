@@ -138,7 +138,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <img src="../admin-theme/img/family.png" style="display: inline-block;"/>
-                            Edit child
+                            Edit child whose username:  <strong><em><span id="username"></span></em></strong>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -171,6 +171,12 @@
 							      <label>Date of birth</label>
 							     <input type="text" required class="form-control" id="birthDate" name="birthDate" placeholder="Enter date with format yyyy-mm-dd" />
 							  </div>
+							  
+							  <div class="form-group">
+	                              <label>Password <span id="passwordUtil"><i class="fa fa-eye-slash"></i></span></label>
+	                              <input type="password" id="password" class="form-control" id="password" name="password">
+	                          	  <label><em>Keep this password blank if you do not want to change.</em></label>
+	                          </div>
                           
 	                          <button type="button" id="btnUpdateChild" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save </button>
 	                          <a href="index.html" class="btn btn-default"><i class="fa fa-long-arrow-left"></i> Back to list</a>
@@ -222,12 +228,13 @@
 		        },
 		        success     : function(data, textStatus, jqXHR) {
 		          	var child = JSON.parse(data);
-			      	$('#firstName').val(user.firstName);
-			      	$('#lastName').val(user.lastName);
-			      	$('#sex').val(user.sex);
-			      	$('#email').val(user.email);
-			      	$('#phone').val(user.phone);
-			      	$('#birtDate').val(user.birtDate);
+			      	$('#firstName').val(child.firstName);
+			      	$('#lastName').val(child.lastName);
+			      	$('#sex').val(child.sex);
+			      	$('#email').val(child.email);
+			      	$('#phone').val(child.phone);
+			      	$('#birthDate').val(child.birthDate);
+			      	$('#username').html(child.username);
 			      	selectedUser = child;
 			   }
 		    });
@@ -236,9 +243,12 @@
 		     * Create new child
 		     */
 			$('#btnUpdateChild').click(function() {
-				var birthDate = $("#birthDate").val();
+				var birthDate = $("#birthDate").val(),
+					password = $("#password").val();
 				
 				var data = {
+					username   : selectedUser.username,
+					password   : password == '' ? selectedUser.password : password,
 		            firstName  : $("#firstName").val(),
 		            lastName   : $("#lastName").val(),
 		            country    : selectedUser.country,
@@ -251,7 +261,7 @@
 				
 			    $.ajax({
 			        type        : "PUT",
-			        url         : window.params.baseUrl + "/api/user/v1/" + selectedUser.id,
+			        url         : window.params.baseUrl + "/api/users/v1/" + selectedUser.id,
 			        data        : data,
 			        dataType    : "text",
 			        error       : function(jqXHR, textStatus, errorThrown) {
@@ -260,12 +270,7 @@
 			            alert(json.message);
 			        },
 			        success     : function(data, textStatus, jqXHR) {
-			        	var family = JSON.parse(data);
-			        	if (family.child !== undefined) {
-			        		document.location.href = 'index.html';
-			        	} else {
-			        		alert('Something went wrong while trying to add clild data. Please try again!');
-			        	}
+			        	document.location.href = 'index.html';
 			        }
 			    });
 			});
