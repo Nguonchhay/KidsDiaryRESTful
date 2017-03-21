@@ -88,10 +88,10 @@
                             <a href="#"><i class="fa fa-group fa-fw"></i> Family<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse in">
                                 <li>
-                                    <a href="#">Add Family Member</a>
+                                    <a href="create.html"><i class="fa fa-plus"></i> Add Family Member</a>
                                 </li>
                                 <li>
-                                    <a href="#">List of Family Member</a>
+                                    <a href="index.html"><i class="fa fa-th"></i> List of Family Member</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -234,39 +234,22 @@
 		     * Create new child
 		     */
 			$('#btnUpdateChild').click(function() {
-				var country = 0,
-				userType = 3,
-				birthDate = $("#birthDate").val(),
-				parentId = 0,
-				parentType = 1;
-				
-				var data = window.cookie.getCookie(window.params.cookieKey);
-				var user = JSON.parse(data);
-				if (user.accessToken !== undefined) {
-					country = parseInt(user.country);
-					parentId = parseInt(user.id);
-					parentType = parseInt(user.userType);
-				}
+				var birthDate = $("#birthDate").val();
 				
 				var data = {
-					parentId   : parentId,
-					parentType : parentType,
-					note       : $("#note").val(),
-		            username   : $("#username").val(),
-		            password   : $("#password").val(),
 		            firstName  : $("#firstName").val(),
 		            lastName   : $("#lastName").val(),
-		            country    : country,
-		            userType   : userType,
+		            country    : selectedUser.country,
+		            userType   : selectedUser.userType,
 		            sex        : $("#sex").val(),
-		            email      : '',
+		            email      : selectedUser.email,
 		            birthDate  : birthDate != '' ? birthDate : '1970-01-01',
 		            phone      : $("#phone").val()
 		        };
 				
 			    $.ajax({
-			        type        : "POST",
-			        url         : window.params.baseUrl + "/api/families/v1",
+			        type        : "PUT",
+			        url         : window.params.baseUrl + "/api/user/v1/" + selectedUser.id,
 			        data        : data,
 			        dataType    : "text",
 			        error       : function(jqXHR, textStatus, errorThrown) {
