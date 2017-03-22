@@ -154,7 +154,7 @@
 	                          
 							  <div class="form-group">
 	                              <label>Activities</label>
-	                              <select id="activities" class="form-control"></select>
+	                              <select id="activities" class="form-control" multiple></select>
 	                          </div>
                           
 	                          <button type="button" id="btnCreateChildActivity" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save </button>
@@ -186,8 +186,71 @@
 	<script src="../js/custom.js"></script>
 	<script>
 		$(document).ready(function() {
+			var parentId = 0,
+				userType = 0;
+			
 			$('#date').datepicker({
 		    	dateFormat: 'yy-mm-dd'
+		    });
+			
+			var data = window.cookie.getCookie(window.params.cookieKey);
+			var user = JSON.parse(data);
+			if (user.accessToken !== undefined) {
+				parentId = parseInt(user.id);
+				userType = parseInt(user.userType);
+			}
+			
+			/**
+			 * Activities
+			 */
+			 $.ajax({
+		        type        : "GET",
+		        url         : window.params.baseUrl + "/api/activities/v1/all?parentId=" + parentId,
+		        data        : {},
+		        dataType    : "text",
+		        error       : function(jqXHR, textStatus, errorThrown) {
+		            console.log('getJSON request failed! ' + textStatus);
+		            var json = JSON.parse(jqXHR.responseText);
+		            alert(json.message);
+		        },
+		        success     : function(data, textStatus, jqXHR) {
+		          	var activities = JSON.parse(data);
+			      	var activityData = '';
+			      	if (activities.length) {
+			      		$.each(activities, function(index, activity) {
+			      			activityData += '<option value="' + activity.id + '">' + activity.name + '</option>';
+			      		});
+			      	}
+			      	$('#activities').html(activityData);	
+			   }
+		    });
+			
+			 /**
+			  * Children
+			  */
+			 $.ajax({
+				type        : "POST",
+		        url         : window.params.baseUrl + "/api/families/v1/children",
+		        data        : {
+		        	parentId : parentId,
+		        	userType : userType
+		        },
+		        dataType    : "text",
+		        error       : function(jqXHR, textStatus, errorThrown) {
+		            console.log('getJSON request failed! ' + textStatus);
+		            var json = JSON.parse(jqXHR.responseText);
+		            alert(json.message);
+		        },
+		        success     : function(data, textStatus, jqXHR) {
+		          	var children = JSON.parse(data);
+			      	var childrenData = '';
+			      	if (children.length) {
+			      		$.each(children, function(index, child) {
+			      			childrenData += '<option value="' + child.id + '">' + child.fullname + '</option>';
+			      		});
+			      	}
+			      	$('#child').html(childrenData);	
+			   }
 		    });
 			
 			/**
