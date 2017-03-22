@@ -11,6 +11,7 @@ public class Activity extends AbstractEntity {
 	
 	public static final String TABLE = "activities";
 	
+	private Long parentId;
 	private String name;
 	private String icon;
 	private int score;
@@ -18,13 +19,22 @@ public class Activity extends AbstractEntity {
 	private boolean isActivated;
 	
 	public Activity() {}
-	public Activity(Long id, String name, String icon, int score, String note, boolean isActivated) {
+	public Activity(Long id, Long parentId, String name, String icon, int score, String note, boolean isActivated) {
 		super.setId(id);
+		setParentId(parentId);
 		setName(name);
 		setIcon(icon);
 		setScore(score);
 		setNote(note);
 		setActivated(isActivated);
+	}
+	
+	public Long getParentId() {
+		return parentId;
+	}
+	
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 	
 	public String getName() {

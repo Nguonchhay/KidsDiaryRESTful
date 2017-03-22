@@ -2,3 +2,7 @@
     resize: vertical;
     overflow: auto;
 }
+
+.activity-icon {
+	width: 50px;
+}

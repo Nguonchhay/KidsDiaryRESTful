@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Family Members - Kids Diary App</title>
+    <title>Activities - Kids Diary App</title>
 	<link rel="shortcut icon" href="../admin-theme/img/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap Core CSS -->
@@ -30,7 +30,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    
+	<link href="../css/custom.css" rel="stylesheet">
 </head>
 
 <body>
@@ -139,14 +140,14 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table" id="childrenTable">
+                                <table class="table" id="activityTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Last name</th>
-                                            <th>First Name</th>
-                                            <th>Sex</th>
-                                            <th>Date of birth</th>
+                                            <th>Name</th>
+                                            <th>Icon</th>
+                                            <th>Score</th>
+                                            <th>Note</th>
                                             <th>
 												<a href="create.html" class="btn btn-default"><i class="fa fa-plus"></i> New </a>
 											</th>
@@ -154,7 +155,7 @@
                                     </thead>
                                     <tbody>
                                     	<tr>
-                                    		<td colspan="6"> No child.</td>
+                                    		<td colspan="6"> No activity.</td>
                                     	</tr>
                                     </tbody>
                                 </table>
@@ -187,24 +188,22 @@
 	<script>
 		$(document).ready(function() {
 			var parentId = 0,
-				userType = 1;
+				fullname = '';
+			
 			var data = window.cookie.getCookie(window.params.cookieKey);
 			var user = JSON.parse(data);
 			if (user.accessToken !== undefined) {
-				parentId = parseInt(user.id)
-				userType = parseInt(user.userType)
+				parentId = parseInt(user.id);
+				fullname = user.fullname;
 			}
 			
 			/**
-			 * Assign children to family
+			 * Activities
 			 */
 			 $.ajax({
-		        type        : "POST",
-		        url         : window.params.baseUrl + "/api/families/v1/children",
-		        data        : {
-		        	parentId : parentId,
-		        	userType : userType
-		        },
+		        type        : "GET",
+		        url         : window.params.baseUrl + "/api/activities/v1/all?parentId=" + parentId,
+		        data        : {},
 		        dataType    : "text",
 		        error       : function(jqXHR, textStatus, errorThrown) {
 		            console.log('getJSON request failed! ' + textStatus);
@@ -212,29 +211,30 @@
 		            alert(json.message);
 		        },
 		        success     : function(data, textStatus, jqXHR) {
-		          	var children = JSON.parse(data);
-			      	var childrenData = '';
-			      	if (children.length) {
-			      		$.each(children, function(index, child) {
-			      			var childData = '<tr id="tr-' + child.id + '">';
+		          	var activities = JSON.parse(data);
+			      	var activityData = '';
+			      	if (activities.length) {
+			      		$.each(activities, function(index, activity) {
+			      			var childData = '<tr id="tr-' + activity.id + '">';
 			      				childData += '<td>' + (index + 1) + '</td>';
-			      				childData += '<td>' + child.lastName + '</td>';
-			      				childData += '<td>' + child.firstName + '</td>';
-			      				childData += '<td>' + child.sex + '</td>';
-			      				childData += '<td>' + child.birthDate + '</td>';
+			      				childData += '<td>' + fullname + '</td>';
+			      				childData += '<td>' + activity.name + '</td>';
+			      				childData += '<td><img class="activity-icon" src="' + window.params.baseUrl + '/' + activity.icon + '"></td>';
+			      				childData += '<td>' + activity.score + '</td>';
+			      				childData += '<td>' + activity.note + '</td>';
 			      				childData += '<td>';
-			      					childData += '<a class="btn btn-default child-edit" href="edit.html?id=' + child.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
-			      					childData += '<button type="button" class="btn btn-default child-delete" id="' + child.id + '" data-href="/api/families/v1/child/delete"><i class="fa fa-times"></i> Delete </button>';
+			      					childData += '<a class="btn btn-default activity-edit" href="edit.html?id=' + activity.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
+			      					childData += '<button type="button" class="btn btn-default activity-delete" id="' + activity.id + '" data-href="/api/activity/v1/item/delete"><i class="fa fa-times"></i> Delete </button>';
 			      				childData += '</td>';
-			      			childData += '</tr>';
-			      			childrenData += childData;
+			      				activityData += '</tr>';
+			      			activityData += childData;
 			      		});
 			      	}
 
-			      	if (childrenData == '') {
-			      		$('#childrenTable tbody').html('No child.');
+			      	if (activityData == '') {
+			      		$('#activityTable tbody').html('No activity.');
 			      	} else {
-			      		$('#childrenTable tbody').html(childrenData);	
+			      		$('#activityTable tbody').html(activityData);	
 			      	}
 			   }
 		    });
@@ -242,9 +242,9 @@
 			 /**
 			  * Delete children
 			  */
-			 $(document).on('click', '.child-delete', function() {
+			 $(document).on('click', '.activity-delete', function() {
 				 var button = $(this);
-				 if (confirm('Are you sure to delete this child?')) {
+				 if (confirm('Are you sure to delete this activity?')) {
 					 var data = {
 							 parentId : parentId,
 					        userType : userType,
