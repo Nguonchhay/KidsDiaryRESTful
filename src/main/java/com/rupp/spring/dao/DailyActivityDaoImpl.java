@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.rupp.spring.domain.DailyActivity;
 import com.rupp.spring.domain.ResponseList;
 
-@Repository("activityDaoImpl")
+@Repository("dailyActivityDaoImpl")
 public class DailyActivityDaoImpl implements DailyActivityDao {
     private static final Logger LOG = LoggerFactory.getLogger(DailyActivityDaoImpl.class);
     
