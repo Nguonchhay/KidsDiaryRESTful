@@ -147,6 +147,11 @@
 	                              <select id="child" class="form-control"></select>
 	                          </div>
 	                          
+	                          <div class="form-group">
+							      <label>Date</label>
+							     <input type="text" required class="form-control" id="date" name="birthDate" placeholder="Enter date with format yyyy-mm-dd" />
+							  </div>
+	                          
 							  <div class="form-group">
 	                              <label>Activities</label>
 	                              <select id="activities" class="form-control"></select>
@@ -181,6 +186,10 @@
 	<script src="../js/custom.js"></script>
 	<script>
 		$(document).ready(function() {
+			$('#date').datepicker({
+		    	dateFormat: 'yy-mm-dd'
+		    });
+			
 			/**
 		     * Create new activity
 		     */
