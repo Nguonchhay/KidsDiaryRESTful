@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>New Activity - Kids Diary App</title>
+    <title>Edit Children Activity - Kids Diary App</title>
 	<link rel="shortcut icon" href="../admin-theme/img/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap Core CSS -->
@@ -97,23 +97,23 @@
                         </li>
                         <li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i>Activity<span class="fa arrow"></span></a>
-								<ul class="nav nav-second-level collapse in">
+								<ul class="nav nav-second-level">
                                 <li>
-                                    <a href="create.html"><i class="fa fa-plus"></i> New Activity</a>
+                                    <a href="../activity/create.html"><i class="fa fa-plus"></i> New Activity</a>
                                 </li>
 								<li>
-                                    <a href="index.html"><i class="fa fa-th"></i> Activity List</a>
+                                    <a href="../activity/index.html"><i class="fa fa-th"></i> Activity List</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
                             <a href="tables.html"><i class="fa  fa-file-text-o"></i> Children Activity<span class="fa arrow"></span></a>
-								<ul class="nav nav-second-level">
+								<ul class="nav nav-second-level collapse in">
                                 <li>
-                                    <a href="../children/create.html"><i class="fa fa-plus"></i> New Activity For Child</a>
+                                    <a href="create.html"><i class="fa fa-plus"></i> New Activity For Child</a>
                                 </li>
 								<li>
-                                    <a href="../children/index.html"><i class="fa fa-th"></i> List Children Activity</a>
+                                    <a href="index.html"><i class="fa fa-th"></i> List Children Activity</a>
                                 </li>
                             </ul>
                         </li>
@@ -137,7 +137,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <img src="../admin-theme/img/family.png" style="display: inline-block;"/>
-                            Add new activity
+                            Edit activity
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -172,7 +172,7 @@
 	                              <textarea id="note" rows="5" class="form-control textarea"></textarea>
 	                          </div>
                           
-	                          <button type="button" id="btnCreateActivity" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save </button>
+	                          <button type="button" id="btnUpdateActivity" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save </button>
 	                          <a href="index.html" class="btn btn-default"><i class="fa fa-long-arrow-left"></i> Back to list</a>
 	                      </form>
                         </div>
@@ -201,20 +201,37 @@
 	<script src="../js/custom.js"></script>
 	<script>
 		$(document).ready(function() {
+			var selectedActivity = {};
+			
 			/**
-		     * Create new activity
+			 * Find family member
+			 */
+			 $.ajax({
+		        type        : "GET",
+		        url         : window.params.baseUrl + "/api/activities/v1/" + window.getUrlParameter('id'),
+		        data        : {},
+		        dataType    : "text",
+		        error       : function(jqXHR, textStatus, errorThrown) {
+		            console.log('getJSON request failed! ' + textStatus);
+		            var json = JSON.parse(jqXHR.responseText);
+		            alert(json.message);
+		        },
+		        success     : function(data, textStatus, jqXHR) {
+		          	var activity = JSON.parse(data);
+			      	$('#name').val(activity.name);
+			      	$('#icon').val(activity.icon);
+			      	$('#score').val(activity.score);
+			      	$('#note').val(activity.note);
+			      	selectedActivity = activity;
+			   }
+		    });
+			
+			/**
+		     * Update activity
 		     */
-			$('#btnCreateActivity').click(function() {
-				var parentId = 0;
-				
-				var data = window.cookie.getCookie(window.params.cookieKey);
-				var user = JSON.parse(data);
-				if (user.accessToken !== undefined) {
-					parentId = parseInt(user.id);
-				}
-				
+			$('#btnUpdateActivity').click(function() {
 				var data = {
-					parentId   : parentId,
+					parentId   : selectedActivity.parentId,
 		            name       : $("#name").val(),
 		            icon       : $("#icon").val(),
 		            score      : parseInt($("#score").val()),
@@ -222,8 +239,8 @@
 		        };
 				
 			    $.ajax({
-			        type        : "POST",
-			        url         : window.params.baseUrl + "/api/activities/v1",
+			        type        : "PUT",
+			        url         : window.params.baseUrl + "/api/activities/v1/" + selectedActivity.id,
 			        data        : data,
 			        dataType    : "text",
 			        error       : function(jqXHR, textStatus, errorThrown) {
@@ -232,17 +249,11 @@
 			            alert(json.message);
 			        },
 			        success     : function(data, textStatus, jqXHR) {
-			        	var activity = JSON.parse(data);
-			        	if (activity.id !== undefined) {
-			        		document.location.href = 'index.html';
-			        	} else {
-			        		alert('Something went wrong while trying to add activity data. Please try again!');
-			        	}
+			        	document.location.href = 'index.html';
 			        }
 			    });
 			});
 		});
 	</script>
 </body>
-
 </html>

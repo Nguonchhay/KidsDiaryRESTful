@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>New Activity - Kids Diary App</title>
+    <title>Children Activities - Kids Diary App</title>
 	<link rel="shortcut icon" href="../admin-theme/img/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap Core CSS -->
@@ -23,9 +23,6 @@
 
     <!-- Custom Fonts -->
     <link href="../admin-theme/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    
-    <link rel="stylesheet" href="../css/custom.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,7 +30,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    
+	<link href="../css/custom.css" rel="stylesheet">
 </head>
 
 <body>
@@ -95,25 +93,25 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                       <li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i>Activity<span class="fa arrow"></span></a>
-								<ul class="nav nav-second-level collapse in">
+								<ul class="nav nav-second-level">
                                 <li>
-                                    <a href="create.html"><i class="fa fa-plus"></i> New Activity</a>
+                                    <a href="../activity/create.html"><i class="fa fa-plus"></i> New Activity</a>
                                 </li>
 								<li>
-                                    <a href="index.html"><i class="fa fa-th"></i> Activity List</a>
+                                    <a href="../activity/index.html"><i class="fa fa-th"></i> Activity List</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
                             <a href="tables.html"><i class="fa  fa-file-text-o"></i> Children Activity<span class="fa arrow"></span></a>
-								<ul class="nav nav-second-level">
+								<ul class="nav nav-second-level collapse in">
                                 <li>
-                                    <a href="../children/create.html"><i class="fa fa-plus"></i> New Activity For Child</a>
+                                    <a href="create.html"><i class="fa fa-plus"></i> New Activity For Child</a>
                                 </li>
 								<li>
-                                    <a href="../children/index.html"><i class="fa fa-th"></i> List Children Activity</a>
+                                    <a href="index.html"><i class="fa fa-th"></i> List Children Activity</a>
                                 </li>
                             </ul>
                         </li>
@@ -127,7 +125,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Activities</h1>
+                    <h1 class="page-header">Children Activities</h1>
                 </div>
             </div>
             
@@ -137,55 +135,43 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <img src="../admin-theme/img/family.png" style="display: inline-block;"/>
-                            Add new activity
+                            List Children Activities
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form role="form">
-	                          <div class="form-group">
-	                              <label>Name</label>
-	                              <input class="form-control" id="name" placeholder="Name" value="Eat">
-	                          </div>
-	                          
-	                          <div class="form-group">
-	                              <label>Icon</label>
-	                              <select id="icon" class="form-control">
-	                              	<option value=""></option>
-	                              	<option selected value="">--- Select Icon ---</option>
-	                              	<option value="upload/images/activities/eat.png">Eat</option>
-	                              	<option value="upload/images/activities/exercise.png">Exercise</option>
-	                              	<option value="upload/images/activities/painting.png">Painting</option>
-	                              	<option value="upload/images/activities/read.png">Reading book</option>
-	                              	<option value="upload/images/activities/sleep.png">Sleep</option>
-	                              	<option value="upload/images/activities/take-a-bath.png">Take a bath</option>
-	                              	<option value="upload/images/activities/video.png">Watch movie</option>
-	                              </select>
-	                          </div>
-	                          
-							  <div class="form-group">
-	                              <label>Score</label>
-	                              <input class="form-control" id="score" placeholder="Score" value="5">
-	                          </div>
-	                          
-	                          <div class="form-group">
-	                              <label>Note </label>
-	                              <textarea id="note" rows="5" class="form-control textarea"></textarea>
-	                          </div>
-                          
-	                          <button type="button" id="btnCreateActivity" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save </button>
-	                          <a href="index.html" class="btn btn-default"><i class="fa fa-long-arrow-left"></i> Back to list</a>
-	                      </form>
+                            <div class="table-responsive">
+                                <table class="table" id="activityTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Child name</th>
+                                            <th>Activity name</th>
+                                            <th>Icon</th>
+                                            <th>
+												<a href="create.html" class="btn btn-default"><i class="fa fa-plus"></i> New </a>
+											</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<tr>
+                                    		<td colspan="6"> No children activity.</td>
+                                    	</tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
                         </div>
+                        <!-- /.panel-body -->
                     </div>
+                    <!-- /.panel -->
                 </div>
+			<!-- /.row -->
+			
         </div>
     </div>
 
     <!-- jQuery -->
     <script src="../admin-theme/vendor/jquery/jquery.min.js"></script>
-    
-    <script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
-    <script type="text/javascript" src="../js/jquery-ui-1.8.17.custom.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../admin-theme/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -195,52 +181,84 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../admin-theme/dist/js/sb-admin-2.js"></script>
-    <script src="../js/jquery-ui.js"></script>
 	
 	<script src="../js/cookie.js"></script>
 	<script src="../js/custom.js"></script>
 	<script>
 		$(document).ready(function() {
+			var parentId = 0,
+				fullname = '';
+			
+			var data = window.cookie.getCookie(window.params.cookieKey);
+			var user = JSON.parse(data);
+			if (user.accessToken !== undefined) {
+				parentId = parseInt(user.id);
+				fullname = user.fullname;
+			}
+			
 			/**
-		     * Create new activity
-		     */
-			$('#btnCreateActivity').click(function() {
-				var parentId = 0;
-				
-				var data = window.cookie.getCookie(window.params.cookieKey);
-				var user = JSON.parse(data);
-				if (user.accessToken !== undefined) {
-					parentId = parseInt(user.id);
-				}
-				
-				var data = {
-					parentId   : parentId,
-		            name       : $("#name").val(),
-		            icon       : $("#icon").val(),
-		            score      : parseInt($("#score").val()),
-		            note       : $("#note").val()
-		        };
-				
-			    $.ajax({
-			        type        : "POST",
-			        url         : window.params.baseUrl + "/api/activities/v1",
-			        data        : data,
-			        dataType    : "text",
-			        error       : function(jqXHR, textStatus, errorThrown) {
-			            console.log('getJSON request failed! ' + textStatus);
-			            var json = JSON.parse(jqXHR.responseText);
-			            alert(json.message);
-			        },
-			        success     : function(data, textStatus, jqXHR) {
-			        	var activity = JSON.parse(data);
-			        	if (activity.id !== undefined) {
-			        		document.location.href = 'index.html';
-			        	} else {
-			        		alert('Something went wrong while trying to add activity data. Please try again!');
-			        	}
-			        }
-			    });
-			});
+			 * Activities
+			 */
+			 $.ajax({
+		        type        : "GET",
+		        url         : window.params.baseUrl + "/api/activities/v1/children?parentId=" + parentId,
+		        data        : {},
+		        dataType    : "text",
+		        error       : function(jqXHR, textStatus, errorThrown) {
+		            console.log('getJSON request failed! ' + textStatus);
+		            var json = JSON.parse(jqXHR.responseText);
+		            alert(json.message);
+		        },
+		        success     : function(data, textStatus, jqXHR) {
+		          	/* var activities = JSON.parse(data);
+			      	var activityData = '';
+			      	if (activities.length) {
+			      		$.each(activities, function(index, activity) {
+			      			var childData = '<tr id="tr-' + activity.id + '">';
+			      				childData += '<td>' + (index + 1) + '</td>';
+			      				childData += '<td>' + activity.name + '</td>';
+			      				childData += '<td><img class="activity-icon" src="' + window.params.baseUrl + '/' + activity.icon + '"></td>';
+			      				childData += '<td>' + activity.score + '</td>';
+			      				childData += '<td>' + activity.note + '</td>';
+			      				childData += '<td>';
+			      					childData += '<a class="btn btn-default activity-edit" href="edit.html?id=' + activity.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
+			      					childData += '<button type="button" class="btn btn-default activity-delete" id="' + activity.id + '" data-href="/api/activities/v1/' + activity.id + '"><i class="fa fa-times"></i> Delete </button>';
+			      				childData += '</td>';
+			      				activityData += '</tr>';
+			      			activityData += childData;
+			      		});
+			      	}
+
+			      	if (activityData == '') {
+			      		$('#activityTable tbody').html('No activity.');
+			      	} else {
+			      		$('#activityTable tbody').html(activityData);	
+			      	} */
+			   }
+		    });
+			
+			 /**
+			  * Delete children
+			  */
+			 $(document).on('click', '.activity-delete', function() {
+				 var button = $(this);
+				 if (confirm('Are you sure to delete this activity?')) {
+					 $.ajax({
+				        type        : "DELETE",
+				        url         : window.params.baseUrl + button.data('href'),
+				        data        : {},
+				        dataType    : "text",
+				        error       : function(jqXHR, textStatus, errorThrown) {
+				            console.log('getJSON request failed! ' + textStatus);
+				            var json = JSON.parse(jqXHR.responseText);
+				            alert(json.message);
+				        },
+				        success     : function(data, textStatus, jqXHR) {
+					      	$('#tr-' + button.attr('id')).remove();
+					   }
+				    });
+				 }
+			 });
 		});
 	</script>
 </body>
