@@ -42,6 +42,11 @@ public class FamilyServiceImpl implements FamilyService {
     public Long delete(Long id) {
         return dao.delete(id);
     }
+    
+    @Override
+    public boolean deleteChild(Long parentId, Long childId, Long userType) {
+    	return dao.deleteChild( parentId, childId, userType);
+    }
 
     @Override
     public Family update(Long id, Family family) {

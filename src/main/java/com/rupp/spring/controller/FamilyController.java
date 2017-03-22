@@ -239,4 +239,19 @@ public class FamilyController {
         }
         return new ResponseEntity<>("Force delete family with id = " + id, HttpStatus.OK);
     }
+    
+    //@DeleteMapping("/v1/child")
+    @RequestMapping(value = "/v1/child/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity deleteFamilyChild(HttpServletRequest request,
+    		@RequestParam(value="parentId", required=false) Long parentId,
+    		@RequestParam(value="userType", required=false) Long userType,
+    		@RequestParam(value="childId", required=false) Long childId) {
+        logger.debug("====Delete family child with id :[{}] ====", childId);
+        if (! service.deleteChild(parentId, childId, userType)) {
+            return new ResponseEntity("No family child found for ID " + childId, HttpStatus.NOT_FOUND);
+        }
+        userService.delete(childId);
+        return new ResponseEntity<>("Delete family child with id = " + childId, HttpStatus.OK);
+    }
 }

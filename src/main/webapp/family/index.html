@@ -217,7 +217,7 @@
 			      	var childrenData = '';
 			      	if (children.length) {
 			      		$.each(children, function(index, child) {
-			      			var childData = '<tr>';
+			      			var childData = '<tr id="tr-' + child.id + '">';
 			      				childData += '<td>' + (index + 1) + '</td>';
 			      				childData += '<td>' + child.lastName + '</td>';
 			      				childData += '<td>' + child.firstName + '</td>';
@@ -225,7 +225,7 @@
 			      				childData += '<td>' + child.birthDate + '</td>';
 			      				childData += '<td>';
 			      					childData += '<a class="btn btn-default child-edit" href="edit.html?id=' + child.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
-			      					childData += '<button type="button" class="btn btn-default child-delete" onclick="deleteChild(' + child.id + ')" id="' + child.id + '" data-href="/api/families/v1/' + child.id + '"><i class="fa fa-times"></i> Delete </button>';
+			      					childData += '<button type="button" class="btn btn-default child-delete" id="' + child.id + '" data-href="/api/families/v1/child/delete"><i class="fa fa-times"></i> Delete </button>';
 			      				childData += '</td>';
 			      			childData += '</tr>';
 			      			childrenData += childData;
@@ -240,52 +240,34 @@
 			   }
 		    });
 			
-			/**
-			 * Delete children
-			 */
-			 function deleteChild(id) {
-				var button = $('#' + id);
-				alert(id);
-				 if (confirm('Are you sure to delete this children?')) {
+			 /**
+			  * Delete children
+			  */
+			 $(document).on('click', '.child-delete', function() {
+				 var button = $(this);
+				 if (confirm('Are you sure to delete this child?')) {
+					 var data = {
+							 parentId : parentId,
+					        userType : userType,
+					        childId  : parseInt(button.attr('id'))
+					 }
+					 
 					 $.ajax({
-					        type        : "DELETE",
-					        url         : window.params.baseUrl + button.data('href') ,
-					        data        : {},
-					        dataType    : "text",
-					        error       : function(jqXHR, textStatus, errorThrown) {
-					            console.log('getJSON request failed! ' + textStatus);
-					            var json = JSON.parse(jqXHR.responseText);
-					            alert(json.message);
-					        },
-					        success     : function(data, textStatus, jqXHR) {
-					          	var children = JSON.parse(data);
-						      	var childrenData = '';
-						      	if (children.length) {
-						      		$.each(children, function(index, child) {
-						      			var childData = '<tr>';
-						      				childData += '<td>' + (index + 1) + '</td>';
-						      				childData += '<td>' + child.lastName + '</td>';
-						      				childData += '<td>' + child.firstName + '</td>';
-						      				childData += '<td>' + child.sex + '</td>';
-						      				childData += '<td>' + child.birthDate + '</td>';
-						      				childData += '<td>';
-						      					childData += '<button type="button" class="btn btn-default" id="childEdit" data-href="edit.html?id="><i class="fa fa-edit"></i> Edit </button>  ';
-						      					childData += '<button type="button" class="btn btn-default" id="childDelete" data-href="/api/users/v1/"><i class="fa fa-times"></i> Delete </button>';
-						      				childData += '</td>';
-						      			childData += '</tr>';
-						      			childrenData += childData;
-						      		});
-						      	}
-
-						      	if (childrenData == '') {
-						      		$('#childrenTable tbody').html('No child.');
-						      	} else {
-						      		$('#childrenTable tbody').html(childrenData);	
-						      	}
-						   }
-					    });
+				        type        : "POST",
+				        url         : window.params.baseUrl + button.data('href'),
+				        data        : data,
+				        dataType    : "text",
+				        error       : function(jqXHR, textStatus, errorThrown) {
+				            console.log('getJSON request failed! ' + textStatus);
+				            var json = JSON.parse(jqXHR.responseText);
+				            alert(json.message);
+				        },
+				        success     : function(data, textStatus, jqXHR) {
+					      	$('#tr-' + button.attr('id')).remove();
+					   }
+				    });
 				 }
-			}
+			 });
 		});
 	</script>
 </body>

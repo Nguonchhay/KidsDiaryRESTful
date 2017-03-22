@@ -36,6 +36,13 @@ public interface FamilyDao {
     Long delete(Long id);
     
     /**
+     * @param parentId
+     * @param childId
+     * @return
+     */
+    boolean deleteChild(Long parentId, Long childId, Long userType);
+    
+    /**
      * @param family
      * @return
      */

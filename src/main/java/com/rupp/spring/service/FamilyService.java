@@ -11,6 +11,7 @@ public interface FamilyService {
     Family get(Long id);
     Family create(Family camily);
     Long delete(Long id);
+    boolean deleteChild(Long parentId, Long childId, Long userType);
     Family update(Long id, Family camily);
     void updateFamily(Long father, Long mother, boolean isFather);
     ResponseList<Family> getPage(int pagesize, String cursorkey);

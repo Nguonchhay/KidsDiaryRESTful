@@ -223,6 +223,21 @@ public class FamilyDaoImpl implements FamilyDao {
         int result = jdbcTemplate.update(sql, new Object[] { id });
         return result == 1 ? id : null;
     }
+    
+    /**
+     * @param parentId
+     * @param childId
+     * @param userType
+     * @return
+     */
+    public boolean deleteChild(Long parentId, Long childId, Long userType) {
+    	String sql = "Delete from " + Family.TABLE + " where father = ? AND child =? ";
+    	if (userType == 2) {
+        	sql = "select * from " + Family.TABLE + " WHERE mother = ? AND child =? ";
+        }
+        int result = jdbcTemplate.update(sql, new Object[] { parentId, childId });
+        return result == 1 ? true : false;
+    }
 
     /**
      * Update the Family object for given id in dummy database. If Family not exists, returns null
@@ -231,7 +246,6 @@ public class FamilyDaoImpl implements FamilyDao {
      * @return Family object with id
      */
     public Family update(Family family) {
-
         final String sql = "UPDATE " + Family.TABLE + " set father =? , mother =?, child =?, note =? where id=?";
         int result = jdbcTemplate.update(sql, new Object[] { family.getFather(), family.getMother(), family.getChild(), family.getNote() , family.getId()});
         return result == 1 ? family : null;
