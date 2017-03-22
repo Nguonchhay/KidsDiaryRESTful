@@ -217,14 +217,13 @@
 			      		$.each(activities, function(index, activity) {
 			      			var childData = '<tr id="tr-' + activity.id + '">';
 			      				childData += '<td>' + (index + 1) + '</td>';
-			      				childData += '<td>' + fullname + '</td>';
 			      				childData += '<td>' + activity.name + '</td>';
 			      				childData += '<td><img class="activity-icon" src="' + window.params.baseUrl + '/' + activity.icon + '"></td>';
 			      				childData += '<td>' + activity.score + '</td>';
 			      				childData += '<td>' + activity.note + '</td>';
 			      				childData += '<td>';
 			      					childData += '<a class="btn btn-default activity-edit" href="edit.html?id=' + activity.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
-			      					childData += '<button type="button" class="btn btn-default activity-delete" id="' + activity.id + '" data-href="/api/activity/v1/item/delete"><i class="fa fa-times"></i> Delete </button>';
+			      					childData += '<button type="button" class="btn btn-default activity-delete" id="' + activity.id + '" data-href="/api/activities/v1/' + activity.id + '"><i class="fa fa-times"></i> Delete </button>';
 			      				childData += '</td>';
 			      				activityData += '</tr>';
 			      			activityData += childData;
@@ -245,16 +244,10 @@
 			 $(document).on('click', '.activity-delete', function() {
 				 var button = $(this);
 				 if (confirm('Are you sure to delete this activity?')) {
-					 var data = {
-							 parentId : parentId,
-					        userType : userType,
-					        childId  : parseInt(button.attr('id'))
-					 }
-					 
 					 $.ajax({
-				        type        : "POST",
+				        type        : "DELETE",
 				        url         : window.params.baseUrl + button.data('href'),
-				        data        : data,
+				        data        : {},
 				        dataType    : "text",
 				        error       : function(jqXHR, textStatus, errorThrown) {
 				            console.log('getJSON request failed! ' + textStatus);
