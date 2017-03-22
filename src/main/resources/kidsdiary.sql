@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Mar 22, 2017 at 01:18 PM
+-- Generation Time: Mar 22, 2017 at 02:02 PM
 -- Server version: 5.5.38
 -- PHP Version: 5.6.2
 
@@ -43,7 +43,7 @@ CREATE TABLE `activities` (
 --
 
 INSERT INTO `activities` (`id`, `parentId`, `name`, `icon`, `score`, `note`, `isActivated`, `createdAt`, `deletedAt`) VALUES
-(1, 17, 'Eat', 'upload/images/activities/eat.png', 5, 'Eating note', 0, '2017-03-22 06:01:44', NULL);
+(1, 17, 'Eat1', 'upload/images/activities/eat.png', 3, 'Eating note1', 0, '2017-03-22 06:01:44', '2017-03-22 13:28:55');
 
 -- --------------------------------------------------------
 
@@ -73,7 +73,7 @@ INSERT INTO `countries` (`id`, `name`, `dialingCode`, `createdAt`, `deletedAt`) 
 --
 
 CREATE TABLE `daily_activities` (
-  `id` bigint(20) NOT NULL,
+`id` bigint(20) NOT NULL,
   `parent` bigint(20) NOT NULL,
   `child` bigint(20) NOT NULL,
   `activityDate` datetime NOT NULL,
@@ -239,6 +239,11 @@ MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 ALTER TABLE `countries`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `daily_activities`
+--
+ALTER TABLE `daily_activities`
+MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `daily_activity_details`
 --
