@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Family Members - Kids Diary App</title>
+	<link rel="shortcut icon" href="../admin-theme/img/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../admin-theme/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../admin-theme/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../admin-theme/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../admin-theme/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+		
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+				
+                <a class="navbar-brand" href="../index.html"><img src="../admin-theme/img/icon.png" style="display: inline-block;"/>Kids Diary</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>
+                        <span id="loginUsername"></span> 
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+						<li><a href="#"><i class="fa fa-lock fa-fw"></i> Change Password</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="../login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="../index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-group fa-fw"></i> Family<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="../family/create.html"><i class="fa fa-plus"></i> Add Family Member</a>
+                                </li>
+                                <li>
+                                    <a href="../family/index.html"><i class="fa fa-th"></i> List of Family Member</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="tables.html"><i class="fa fa-table fa-fw"></i>Activity<span class="fa arrow"></span></a>
+								<ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a href="create.html"><i class="fa fa-plus"></i> New Activity</a>
+                                </li>
+								<li>
+                                    <a href="index.html"><i class="fa fa-th"></i> Activity List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="tables.html"><i class="fa  fa-file-text-o"></i> Children Activity<span class="fa arrow"></span></a>
+								<ul class="nav nav-second-level">
+                                <li>
+                                    <a href="../children/create.html"><i class="fa fa-plus"></i> New Activity For Child</a>
+                                </li>
+								<li>
+                                    <a href="../children/index.html"><i class="fa fa-th"></i> List Children Activity</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Activities</h1>
+                </div>
+            </div>
+            
+            <div class="row">
+			
+			<div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <img src="../admin-theme/img/family.png" style="display: inline-block;"/>
+                            List Activities
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table" id="childrenTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Last name</th>
+                                            <th>First Name</th>
+                                            <th>Sex</th>
+                                            <th>Date of birth</th>
+                                            <th>
+												<a href="create.html" class="btn btn-default"><i class="fa fa-plus"></i> New </a>
+											</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<tr>
+                                    		<td colspan="6"> No child.</td>
+                                    	</tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+			<!-- /.row -->
+			
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../admin-theme/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../admin-theme/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../admin-theme/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../admin-theme/dist/js/sb-admin-2.js"></script>
+	
+	<script src="../js/cookie.js"></script>
+	<script src="../js/custom.js"></script>
+	<script>
+		$(document).ready(function() {
+			var parentId = 0,
+				userType = 1;
+			var data = window.cookie.getCookie(window.params.cookieKey);
+			var user = JSON.parse(data);
+			if (user.accessToken !== undefined) {
+				parentId = parseInt(user.id)
+				userType = parseInt(user.userType)
+			}
+			
+			/**
+			 * Assign children to family
+			 */
+			 $.ajax({
+		        type        : "POST",
+		        url         : window.params.baseUrl + "/api/families/v1/children",
+		        data        : {
+		        	parentId : parentId,
+		        	userType : userType
+		        },
+		        dataType    : "text",
+		        error       : function(jqXHR, textStatus, errorThrown) {
+		            console.log('getJSON request failed! ' + textStatus);
+		            var json = JSON.parse(jqXHR.responseText);
+		            alert(json.message);
+		        },
+		        success     : function(data, textStatus, jqXHR) {
+		          	var children = JSON.parse(data);
+			      	var childrenData = '';
+			      	if (children.length) {
+			      		$.each(children, function(index, child) {
+			      			var childData = '<tr id="tr-' + child.id + '">';
+			      				childData += '<td>' + (index + 1) + '</td>';
+			      				childData += '<td>' + child.lastName + '</td>';
+			      				childData += '<td>' + child.firstName + '</td>';
+			      				childData += '<td>' + child.sex + '</td>';
+			      				childData += '<td>' + child.birthDate + '</td>';
+			      				childData += '<td>';
+			      					childData += '<a class="btn btn-default child-edit" href="edit.html?id=' + child.id + '"><i class="fa fa-edit"></i> Edit </a>  ';
+			      					childData += '<button type="button" class="btn btn-default child-delete" id="' + child.id + '" data-href="/api/families/v1/child/delete"><i class="fa fa-times"></i> Delete </button>';
+			      				childData += '</td>';
+			      			childData += '</tr>';
+			      			childrenData += childData;
+			      		});
+			      	}
+
+			      	if (childrenData == '') {
+			      		$('#childrenTable tbody').html('No child.');
+			      	} else {
+			      		$('#childrenTable tbody').html(childrenData);	
+			      	}
+			   }
+		    });
+			
+			 /**
+			  * Delete children
+			  */
+			 $(document).on('click', '.child-delete', function() {
+				 var button = $(this);
+				 if (confirm('Are you sure to delete this child?')) {
+					 var data = {
+							 parentId : parentId,
+					        userType : userType,
+					        childId  : parseInt(button.attr('id'))
+					 }
+					 
+					 $.ajax({
+				        type        : "POST",
+				        url         : window.params.baseUrl + button.data('href'),
+				        data        : data,
+				        dataType    : "text",
+				        error       : function(jqXHR, textStatus, errorThrown) {
+				            console.log('getJSON request failed! ' + textStatus);
+				            var json = JSON.parse(jqXHR.responseText);
+				            alert(json.message);
+				        },
+				        success     : function(data, textStatus, jqXHR) {
+					      	$('#tr-' + button.attr('id')).remove();
+					   }
+				    });
+				 }
+			 });
+		});
+	</script>
+</body>
+
+</html>
